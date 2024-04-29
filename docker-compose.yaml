@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - workoutPlannerDb:/var/lib/postgresql/data
+  app:
+    image: workoutplanner
+    build: .
+    ports:
+      - '8080:8080'
+    depends_on:
+      - db
+    environment:
+      - PG_HOST=db
+      - PG_USERNAME=admin
+volumes:
+  workoutPlannerDb:
